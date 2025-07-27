@@ -20,14 +20,12 @@ class DownloadController:
     async def get_download(
             self,
             url: str = Query(..., description="URL del contenuto da scaricare"),
-            format: str = Query(None, description="Formato opzionale del contenuto")
+            format: str = Query(None, description="Formato opzionale del contenuto"),
+            playlistend: int = Query(None, description="Numero massimo di elementi della playlist da scaricare")
     ):
         """Scarica il video e lo restituisce come streaming response"""
-
-
-
         try:
-            file_path = await self.download_service.download_video(url, format)  # Chiamata al service
+            file_path = await self.download_service.download_video(url, format, playlistend)  # Chiamata al service
 
             def iter_file():
                 with open(file_path, "rb") as file:
@@ -38,6 +36,8 @@ class DownloadController:
                 media_type=mimetypes.guess_type(file_path)[0] or "application/octet-stream",
                 headers={"Content-Disposition": f"attachment; filename={file_path.split('/')[-1]}"}
             )
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

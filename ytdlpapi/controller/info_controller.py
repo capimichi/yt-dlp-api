@@ -15,10 +15,14 @@ class InfoController:
         """Registra le rotte per il controller"""
         self.router.add_api_route("", self.get_info, methods=["GET"])
 
-    async def get_info(self, url: str = Query(..., description="URL del video")):
+    async def get_info(
+        self,
+        url: str = Query(..., description="URL del video"),
+        playlistend: int = Query(None, description="Numero massimo di elementi della playlist da analizzare")
+    ):
         """Ottiene tutte le informazioni"""
         try:
-            info = await self.info_service.get_info(url)  # Chiamata al service
+            info = await self.info_service.get_info(url, playlistend)  # Chiamata al service
             return info
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
