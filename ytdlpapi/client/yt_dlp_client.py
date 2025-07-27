@@ -24,7 +24,7 @@ class YtDlpClient:
             'quiet': False,
             'no_warnings': False,
             'format': format,
-            'logger': self.logger,
+            # 'logger': self.logger,
         }
         if self.proxy.get_proxy():
             options['proxy'] = self.proxy.get_proxy()
