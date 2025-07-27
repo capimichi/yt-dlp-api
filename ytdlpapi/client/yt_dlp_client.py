@@ -10,7 +10,6 @@ class YtDlpClient:
     @inject
     def __init__(self, proxy: Proxy, default_logger: DefaultLogger):
         self.proxy = proxy
-        self.tmp_dir = tmp_dir
         self.logger = default_logger
 
     def _get_options(self, format: str = 'best') -> dict:
