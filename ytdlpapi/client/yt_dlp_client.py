@@ -1,3 +1,4 @@
+import tempfile
 from yt_dlp import YoutubeDL
 from injector import inject
 from ytdlpapi.model.default_logger import DefaultLogger
@@ -7,7 +8,7 @@ from ytdlpapi.model.proxy import Proxy
 class YtDlpClient:
 
     @inject
-    def __init__(self, proxy: Proxy, tmp_dir: str, default_logger: DefaultLogger):
+    def __init__(self, proxy: Proxy, default_logger: DefaultLogger):
         self.proxy = proxy
         self.tmp_dir = tmp_dir
         self.logger = default_logger
@@ -39,8 +40,9 @@ class YtDlpClient:
         Returns:
             str: Percorso del file scaricato.
         """
+        tmp_dir = tempfile.mkdtemp()
         options = self._get_options(format or 'best')
-        options['outtmpl'] = f'{self.tmp_dir}/%(title)s.%(ext)s'  # Salva il file nella tmp_dir
+        options['outtmpl'] = f'{tmp_dir}/%(title)s.%(ext)s'  # Salva il file nella tmp_dir
         try:
             with YoutubeDL(options) as ydl:
                 info = ydl.extract_info(url, download=True)

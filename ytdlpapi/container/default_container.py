@@ -43,8 +43,6 @@ class DefaultContainer:
         self.log_dir = os.path.join(self.var_dir, 'log')
         os.makedirs(self.log_dir, exist_ok=True)
         self.app_log_path = os.path.join(self.log_dir, 'app.log')
-        self.tmp_dir = os.path.join(self.var_dir, 'tmp')
-        os.makedirs(self.tmp_dir, exist_ok=True)
 
     def _init_environment_variables(self):
         self.api_host = os.environ.get('API_HOST', '0.0.0.0')
@@ -61,7 +59,6 @@ class DefaultContainer:
         self.injector.binder.bind(
             YtDlpClient, YtDlpClient(
                 self.get(Proxy), 
-                self.tmp_dir,
                 self.get(DefaultLogger)
             )
         )
