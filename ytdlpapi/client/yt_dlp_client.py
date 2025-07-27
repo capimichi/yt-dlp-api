@@ -1,15 +1,16 @@
 from yt_dlp import YoutubeDL
 from injector import inject
+from ytdlpapi.model.default_logger import DefaultLogger
 from ytdlpapi.model.proxy import Proxy
-from ytdlpapi.container.default_container import DefaultContainer
 
 
 class YtDlpClient:
 
     @inject
-    def __init__(self, proxy: Proxy, tmp_dir: str):
+    def __init__(self, proxy: Proxy, tmp_dir: str, default_logger: DefaultLogger):
         self.proxy = proxy
         self.tmp_dir = tmp_dir
+        self.logger = default_logger
 
     def _get_options(self, format: str = 'best') -> dict:
         """
@@ -20,9 +21,10 @@ class YtDlpClient:
             dict: Dizionario delle opzioni.
         """
         options = {
-            'quiet': True,
-            'no_warnings': True,
+            'quiet': False,
+            'no_warnings': False,
             'format': format,
+            'logger': self.logger,
         }
         if self.proxy.get_proxy():
             options['proxy'] = self.proxy.get_proxy()

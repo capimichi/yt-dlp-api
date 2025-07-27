@@ -5,6 +5,7 @@ import os
 from injector import Injector
 from dotenv import load_dotenv
 
+from ytdlpapi.model.default_logger import DefaultLogger
 from ytdlpapi.model.proxy import Proxy
 from ytdlpapi.client.yt_dlp_client import YtDlpClient
 
@@ -56,7 +57,12 @@ class DefaultContainer:
 
     def _init_bindings(self):
         self.injector.binder.bind(Proxy, Proxy(self.proxy))
+        self.injector.binder.bind(DefaultLogger, DefaultLogger())
         self.injector.binder.bind(
-            YtDlpClient, YtDlpClient(self.get(Proxy), self.tmp_dir)
+            YtDlpClient, YtDlpClient(
+                self.get(Proxy), 
+                self.tmp_dir,
+                self.get(DefaultLogger)
+            )
         )
 
