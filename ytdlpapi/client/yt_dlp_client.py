@@ -45,7 +45,7 @@ class YtDlpClient:
         """
         tmp_dir = tempfile.mkdtemp()
         options = self._get_options(format or 'best', playlistend)
-        options['outtmpl'] = f'{tmp_dir}/%(title)s.%(ext)s'  # Salva il file nella tmp_dir
+        options['outtmpl'] = f'{tmp_dir}/%(id)s.%(ext)s'  # Salva il file nella tmp_dir
         try:
             with YoutubeDL(options) as ydl:
                 info = ydl.extract_info(url, download=True)
